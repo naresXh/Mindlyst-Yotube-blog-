@@ -7,6 +7,7 @@ const {
 const cookieParser = require("cookie-parser");
 
 const userRoute = require("./routes/user");
+const blogRoute = require("./routes/blog");
 
 const app = express();
 const PORT = 8000;
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user/", userRoute);
+app.use("/blog", blogRoute);
 app.listen(PORT, () => {
   console.log(`Serever is running on ${PORT}`);
 });
