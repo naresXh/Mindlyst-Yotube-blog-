@@ -5,7 +5,7 @@
     <title>Document</title>
   </head>
   <body>
-    <%- include("./partials/nav", { error: error }) %> <%-
-    include("./partials/scripts") %>
+    <%- include("./partials/nav", { error: error }) %> <%= JSON.stringify(user)
+    %> <%- include("./partials/scripts") %>
   </body>
 </html>

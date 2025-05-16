@@ -7,7 +7,7 @@ router.get("/signin", (req, res) => {
 });
 
 router.get("/signup", (req, res) => {
-  res.render("signup");
+  res.render("signup", { error: null });
 });
 
 router.post("/signup", async (req, res) => {
@@ -30,5 +30,9 @@ router.post("/signin", async (req, res) => {
       error: "Incorrect Email and Password",
     });
   }
+});
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("token").redirect("/");
 });
 module.exports = router;
