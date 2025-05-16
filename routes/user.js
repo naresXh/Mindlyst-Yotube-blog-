@@ -1,10 +1,9 @@
-const { createHmac } = require("crypto");
 const { Router } = require("express");
 const User = require("../models/user");
 const router = Router();
 
 router.get("/signin", (req, res) => {
-  res.render("signin");
+  res.render("signin", { error: null });
 });
 
 router.get("/signup", (req, res) => {
@@ -13,9 +12,6 @@ router.get("/signup", (req, res) => {
 
 router.post("/signup", async (req, res) => {
   const { fullName, email, password } = req.body;
-
-  //   console.log(req.body);
-
   await User.create({
     fullName,
     email,
@@ -26,22 +22,13 @@ router.post("/signup", async (req, res) => {
 
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    console.log("error in user");
-    throw new Error("Incorrect user");
+  try {
+    const token = await User.matchPasswordAndToken(email, password);
+    return res.cookie("token", token).redirect("/");
+  } catch (error) {
+    return res.render("signin", {
+      error: "Incorrect Email and Password",
+    });
   }
-
-  const hashedPassword = createHmac("sha256", user.salt)
-    .update(password)
-    .digest("hex");
-
-  if (hashedPassword !== user.password) {
-    console.log("error in password");
-    throw new Error("Incorrect password");
-  }
-
-  return res.redirect("/");
 });
 module.exports = router;

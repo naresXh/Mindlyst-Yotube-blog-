@@ -15,7 +15,7 @@ app.set("views", path.resolve("./views"));
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("home", { error: null });
 });
 
 app.use("/user/", userRoute);
