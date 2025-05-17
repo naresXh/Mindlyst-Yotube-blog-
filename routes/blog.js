@@ -25,11 +25,23 @@ router.get("/add-new", (req, res) => {
   });
 });
 
+router.get("/:id", async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) {
+    return res.status(404).send("Blog not found");
+  }
+  return res.render("blog", {
+    user: req.user,
+    blog,
+    error: null,
+  });
+});
+
 router.post("/", upload.single("coverImage"), async (req, res) => {
   const { title, body } = req.body;
   const blog = await Blog.create({
-    body,
     title,
+    body,
     createdBy: req.user._id,
     coverImageURL: `/uploads/${req.file.filename}`,
   });
